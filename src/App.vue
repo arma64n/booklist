@@ -17,26 +17,22 @@
           <td>{{book.title}}</td>
           <td>{{book.year}}</td>
           <td>{{book.author}}</td>
-          <!--<td><button type="button" class="btn btn-primary" @click="editItem(index)">Edit</button></td>-->
-          <td><button type="button" class="btn btn-danger" @click="deleteItem(index)">Delete</button></td>
+          <td><button type="button" class="btn btn-primary" @click="toggleModal(index)">Edit</button></td>
+          <td><button type="button" class="btn btn-danger" @click="toggleModal(index)">Delete</button></td>
         </tr>
       </tbody>
     </table>
-    <button type="button" class="btn btn-success" @click="visibleNew = true">Add new book</button>
+    <button type="button" class="btn btn-success" @click="toggleModal">Add new book</button>
     <transition name="modal">
-      <new-book-form v-if="visibleNew" v-on:closeModalNew="closeModalNew" v-on:saveNew="saveNew"></new-book-form>
+      <modal v-if="visible"
+             v-on:toggleModal="toggleModal">
+      </modal>
     </transition>
-    <!--<edit-book-form
-      v-if="visible"
-      :selectedBook="selectedBook"
-      v-on:saveEdit="newBookValue">
-    </edit-book-form> -->
   </div>
 </template>
 
 <script>
-import NewBookForm from '@/components/NewBookForm'
-import EditBookForm from '@/components/EditBookForm'
+import Modal from '@/components/Modal'
 
 export default {
   name: 'App',
@@ -44,32 +40,20 @@ export default {
     return {
       books: [
         {title: 'Lord of The Rings', year: '2002', isbn: '145908562986', author: 'Tolkien'},
-        {title: 'Turkish gambit', year: '2014', isbn: '520239525231', author: 'Boris Akunin'}
+        {title: 'Turkish gambit', year: '2014', isbn: '520239525231', author: 'Boris Akunin'},
+        {title: 'Batman', year: '2006', isbn: '3453463437', author: 'DC'},
+        {title: 'Superman', year: '1986', isbn: '7554754548548', author: 'Marvel'}
       ],
-      selectedBook: null,
       visible: false,
-      visibleNew: false
+      currentView: ''
     }
   },
   methods: {
-    deleteItem (index) {
-      this.books.splice(index, 1)
-    },
-    editItem (index) {
-      this.visible = true
-      this.selectedBook = this.books[index]
-    },
-    newBookValue (value) {
-      this.books.push(value)
-    },
-    saveNew (value) {
-      this.books.push(value)
-    },
-    closeModalNew () {
-      this.visibleNew = false
+    toggleModal () {
+      this.visible = !this.visible
     }
   },
-  components: { NewBookForm, EditBookForm }
+  components: { Modal }
 }
 </script>
 
@@ -79,5 +63,8 @@ export default {
 }
 .modal-enter, .modal-leave-to {
   opacity: 0;
+}
+.modal {
+  background: rgba(0,0,0,0.5)
 }
 </style>
