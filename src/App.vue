@@ -12,27 +12,27 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(book, index) in books" :key="book.id">
+        <tr v-for="book in books" :key="book.id">
           <td>{{book.isbn}}</td>
           <td>{{book.title}}</td>
           <td>{{book.year}}</td>
           <td>{{book.author}}</td>
-          <td><button type="button" class="btn btn-primary" @click="toggleModal(index)">Edit</button></td>
-          <td><button type="button" class="btn btn-danger" @click="toggleModal(index)">Delete</button></td>
+          <td><button type="button" class="btn btn-primary" @click="clickedEdit">Edit</button></td>
+          <td><button type="button" class="btn btn-danger" @click="clickedDelete">Delete</button></td>
         </tr>
       </tbody>
     </table>
-    <button type="button" class="btn btn-success" @click="toggleModal">Add new book</button>
+    <button type="button" class="btn btn-success" @click="clickedAdd">Add new book</button>
     <transition name="modal">
-      <modal v-if="visible"
-             v-on:toggleModal="toggleModal">
-      </modal>
+      <div v-if="visible" v-bind:is="currentView" v-on:closeModal="toggleModal"></div>
     </transition>
   </div>
 </template>
 
 <script>
-import Modal from '@/components/Modal'
+import Add from '@/components/Add'
+import Edit from '@/components/Edit'
+import Delete from '@/components/Delete'
 
 export default {
   name: 'App',
@@ -44,16 +44,28 @@ export default {
         {title: 'Batman', year: '2006', isbn: '3453463437', author: 'DC'},
         {title: 'Superman', year: '1986', isbn: '7554754548548', author: 'Marvel'}
       ],
-      visible: false,
-      currentView: ''
+      currentView: '',
+      visible: false
     }
   },
   methods: {
     toggleModal () {
       this.visible = !this.visible
+    },
+    clickedAdd () {
+      this.currentView = 'add'
+      this.toggleModal()
+    },
+    clickedEdit () {
+      this.currentView = 'edit'
+      this.toggleModal()
+    },
+    clickedDelete () {
+      this.currentView = 'delete'
+      this.toggleModal()
     }
   },
-  components: { Modal }
+  components: { Add, Edit, Delete }
 }
 </script>
 

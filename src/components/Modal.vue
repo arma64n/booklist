@@ -4,17 +4,17 @@
     <div class="modal-content">
       <div class="modal-header">
       <h5 class="modal-title">
-          <slot name="header"></slot>
+        <slot name="header">default header</slot>
       </h5>
       <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="closeModal">
-          <span aria-hidden="true">&times;</span>
+        <span aria-hidden="true">&times;</span>
       </button>
       </div>
       <div class="modal-body">
-      <slot name="body"></slot>
+        <slot name="body"></slot>
       </div>
       <div class="modal-footer">
-      <slot name="footer"></slot>
+        <slot name="footer">default button</slot>
       <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="closeModal">Close</button>
       </div>
     </div>
@@ -24,10 +24,10 @@
 
 <script>
 export default {
-  props: ['toggleModal'],
+  name: 'Modal',
   methods: {
     closeModal () {
-      this.$emit('toggleModal')
+      this.$emit('closeModal')
     }
   }
 }
