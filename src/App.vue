@@ -12,19 +12,25 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="book in books" :key="book.id">
+        <tr v-for="(book, index) in books" :key="book.id">
           <td>{{book.isbn}}</td>
           <td>{{book.title}}</td>
           <td>{{book.year}}</td>
           <td>{{book.author}}</td>
-          <td><button type="button" class="btn btn-primary" @click="clickedEdit">Edit</button></td>
-          <td><button type="button" class="btn btn-danger" @click="clickedDelete">Delete</button></td>
+          <td><button type="button" class="btn btn-primary" @click="clickedEdit(index)">Edit</button></td>
+          <td><button type="button" class="btn btn-danger" @click="clickedDelete(index)">Delete</button></td>
         </tr>
       </tbody>
     </table>
     <button type="button" class="btn btn-success" @click="clickedAdd">Add new book</button>
     <transition name="modal">
-      <div v-if="visible" v-bind:is="currentView" v-on:closeModal="toggleModal"></div>
+      <div v-if="visible"
+           v-bind:is="currentView"
+           v-on:closeModal="toggleModal"
+           @addItem="addItem"
+           @editItem="editItem"
+           @deleteItem="deleteItem"
+           :clickedItem="clickedItem"></div>
     </transition>
   </div>
 </template>
@@ -45,7 +51,14 @@ export default {
         {title: 'Superman', year: '1986', isbn: '7554754548548', author: 'Marvel'}
       ],
       currentView: '',
-      visible: false
+      visible: false,
+      clickedIndex: '',
+      clickedItem: {
+        isbn: '',
+        title: '',
+        year: '',
+        author: ''
+      }
     }
   },
   methods: {
@@ -56,12 +69,30 @@ export default {
       this.currentView = 'add'
       this.toggleModal()
     },
-    clickedEdit () {
+    clickedEdit (index) {
       this.currentView = 'edit'
       this.toggleModal()
+      this.clickedIndex = index
+      this.clickedItem.isbn = this.books[index].isbn
+      this.clickedItem.title = this.books[index].title
+      this.clickedItem.year = this.books[index].year
+      this.clickedItem.author = this.books[index].author
     },
-    clickedDelete () {
+    clickedDelete (index) {
       this.currentView = 'delete'
+      this.toggleModal()
+      this.clickedIndex = index
+    },
+    addItem (item) {
+      this.books.push(item)
+      this.toggleModal()
+    },
+    editItem (item) {
+      this.books.splice(this.clickedIndex, 1, item)
+      this.toggleModal()
+    },
+    deleteItem () {
+      this.books.splice(this.clickedIndex, 1)
       this.toggleModal()
     }
   },
