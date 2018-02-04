@@ -30,7 +30,7 @@
     <transition name="modal">
       <div v-if="visible"
            v-bind:is="currentView"
-           v-on:closeModal="toggleModal"
+           @closeModal="toggleModal"
            @addItem="addItem"
            @editItem="editItem"
            @deleteItem="deleteItem"
@@ -43,12 +43,13 @@
 import Add from '@/components/Add'
 import Edit from '@/components/Edit'
 import Delete from '@/components/Delete'
+import List from '@/assets/list'
 
 export default {
   name: 'App',
   data () {
     return {
-      books: [],
+      books: List,
       currentView: '',
       visible: false,
       clickedIndex: '',
@@ -61,13 +62,6 @@ export default {
         read: ''
       }
     }
-  },
-  created () {
-    fetch('https://my-json-server.typicode.com/arma64n/demo/books')
-      .then(response => response.json())
-      .then(json => {
-        this.books = json
-      })
   },
   methods: {
     toggleModal () {
@@ -104,6 +98,20 @@ export default {
     deleteItem () {
       this.books.splice(this.clickedIndex, 1)
       this.toggleModal()
+    }
+  },
+  watch: {
+    books: {
+      handler () {
+        console.log('books changed')
+        sessionStorage.setItem('array', JSON.stringify(this.books))
+      }
+    }
+  },
+  mounted () {
+    console.log('app mounted')
+    if (sessionStorage.getItem('array')) {
+      this.books = JSON.parse(sessionStorage.getItem('array'))
     }
   },
   components: { Add, Edit, Delete }
