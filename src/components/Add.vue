@@ -4,16 +4,27 @@
         <h5 slot="header" class="modal-title">Add new book</h5>
         <div slot="body">
             <div class="input-group mb-3">
-              <input type="text" class="form-control" v-model="newItem.isbn" placeholder="ISBN" aria-label="Username" aria-describedby="basic-addon1">
+              <input type="text" class="form-control" v-model="newItem.title" placeholder="Title">
             </div>
             <div class="input-group mb-3">
-              <input type="text" class="form-control" v-model="newItem.title" placeholder="Title" aria-label="Username" aria-describedby="basic-addon1">
+              <input type="text" class="form-control" v-model="newItem.author" placeholder="Author">
             </div>
             <div class="input-group mb-3">
-              <input type="text" class="form-control" v-model="newItem.year" placeholder="Year" aria-label="Username" aria-describedby="basic-addon1">
+              <input type="text" class="form-control" v-model="newItem.year" placeholder="Year">
             </div>
             <div class="input-group mb-3">
-              <input type="text" class="form-control" v-model="newItem.author" placeholder="Author" aria-label="Username" aria-describedby="basic-addon1">
+              <input type="text" class="form-control" v-model="newItem.country" placeholder="Country">
+            </div>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" v-model="newItem.pages" placeholder="Pages">
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <div class="input-group-text">
+                  <input type="checkbox" v-model="newItem.read">
+                </div>
+              </div>
+              <input type="text" class="form-control" :value="newItem.read ? 'Read!': 'Not yeat'" disabled>
             </div>
           </div>
         <button slot="footer" type="button" class="btn btn-success" @click="addItem">Add book</button>
@@ -30,10 +41,12 @@ export default {
   data () {
     return {
       newItem: {
-        isbn: '',
         title: '',
+        author: '',
         year: '',
-        author: ''
+        country: '',
+        pages: '',
+        read: ''
       }
     }
   },

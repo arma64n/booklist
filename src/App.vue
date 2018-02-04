@@ -3,20 +3,24 @@
     <table class="table">
       <thead>
         <tr>
-          <th scope="col">ISBN</th>
           <th scope="col">Title</th>
+          <th scope="col">Author</th>
           <th scope="col">Year</th>
-          <th scope="col">Authors</th>
+          <th scope="col">Country</th>
+          <th scope="col">Pages</th>
+          <th scope="col">Read</th>
           <th scope="col"></th>
           <th scope="col"></th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(book, index) in books" :key="book.id">
-          <td>{{book.isbn}}</td>
           <td>{{book.title}}</td>
-          <td>{{book.year}}</td>
           <td>{{book.author}}</td>
+          <td>{{book.year}}</td>
+          <td>{{book.country}}</td>
+          <td>{{book.pages}}</td>
+          <td>{{book.read ? 'Read!' : ''}}</td>
           <td><button type="button" class="btn btn-primary" @click="clickedEdit(index)">Edit</button></td>
           <td><button type="button" class="btn btn-danger" @click="clickedDelete(index)">Delete</button></td>
         </tr>
@@ -44,22 +48,26 @@ export default {
   name: 'App',
   data () {
     return {
-      books: [
-        {title: 'Lord of The Rings', year: '2002', isbn: '145908562986', author: 'Tolkien'},
-        {title: 'Turkish gambit', year: '2014', isbn: '520239525231', author: 'Boris Akunin'},
-        {title: 'Batman', year: '2006', isbn: '3453463437', author: 'DC'},
-        {title: 'Superman', year: '1986', isbn: '7554754548548', author: 'Marvel'}
-      ],
+      books: [],
       currentView: '',
       visible: false,
       clickedIndex: '',
       clickedItem: {
-        isbn: '',
         title: '',
+        author: '',
         year: '',
-        author: ''
+        country: '',
+        pages: '',
+        read: ''
       }
     }
+  },
+  created () {
+    fetch('https://my-json-server.typicode.com/arma64n/demo/books')
+      .then(response => response.json())
+      .then(json => {
+        this.books = json
+      })
   },
   methods: {
     toggleModal () {
@@ -73,10 +81,12 @@ export default {
       this.currentView = 'edit'
       this.toggleModal()
       this.clickedIndex = index
-      this.clickedItem.isbn = this.books[index].isbn
       this.clickedItem.title = this.books[index].title
-      this.clickedItem.year = this.books[index].year
       this.clickedItem.author = this.books[index].author
+      this.clickedItem.year = this.books[index].year
+      this.clickedItem.country = this.books[index].country
+      this.clickedItem.pages = this.books[index].pages
+      this.clickedItem.read = this.books[index].read
     },
     clickedDelete (index) {
       this.currentView = 'delete'
